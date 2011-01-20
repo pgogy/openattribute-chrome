@@ -1,0 +1,38 @@
+{
+   "extDesc": {
+      "description": "Extension description",
+      "message": "This extension lists all RDF triples on a Website that are embedded in RDFa format."
+   },
+   "extName": {
+      "description": "Extension name",
+      "message": "RDFa Triples Lister"
+   },
+   "iframe": {
+      "description": "iframe option",
+      "message": "Inline in an iframe"
+   },
+   "lookFeel": {
+      "description": "Look and Feel header",
+      "message": "Look and Feel"
+   },
+   "options": {
+      "description": "Options header",
+      "message": "Options"
+   },
+   "popup": {
+      "description": "pop-up option",
+      "message": "In the pop-up window"
+   },
+   "save": {
+      "description": "Save button",
+      "message": "Save"
+   },
+   "tripleFound": {
+      "description": "Number of triples, singular",
+      "message": "Triple found"
+   },
+   "triplesFound": {
+      "description": "Number of triples, plural",
+      "message": "Triples found"
+   }
+}

@@ -1,0 +1,22 @@
+{
+   "background_page": "background.html",
+   "content_scripts": [ {
+      "js": [ "content_script.js" ],
+	  "matches": ["<all_urls>"],
+	  "run_at": "document_idle"
+   } ],
+   "default_locale": "en_US",
+   "icons": {
+      "128": "icon.png"
+   },
+   "name": "OpenAttribute Chrome",
+   "page_action": {
+      "default_icon": "icon.png",
+	  "default_title": "Get Attribution Info",
+      "popup": "popup.html"
+   },
+   "permissions": [ "tabs",
+   					"<all_urls>"
+				  ],
+   "version" : "0.1"
+}

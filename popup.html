@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <script type="text/javascript">
+      function init() {
+		
+		var bkg = chrome.extension.getBackgroundPage(); 
+		
+		title = bkg.attribute_info.title;
+		url = bkg.attribute_info.url;
+		license = bkg.attribute_info.license;
+		license_link = bkg.attribute_info.license_link;
+		license_shorthand = bkg.attribute_info.license_shorthand ;
+		author = bkg.attribute_info.author;
+		attribution_url = bkg.attribute_info.attribution_url;
+		
+		document.getElementById("container").innerHTML = "<p style=\"font-weight:bold\">" + title + "</p>";
+		attrib_string = '<span property="dct:title">' + title + '</span>';
+		
+		document.getElementById("container").innerHTML += "<p style=\"font-size:80%\"> Source : " + url + "</p>";
+		attrib_string += '<span property="dct:title">' + title + '</span>';
+
+	    if(author!=""){
+			
+			if(attribution_url!=""){
+				
+				document.getElementById("container").innerHTML += "<p style=\"font-size:80%\"> Author: <a href=\"" + attribution_url + "\">" + author + "</a></p>";
+				attrib_string += '<a rel="cc:attributionURL" ' + 'href="' + attribution_url + '">' + attribution_url + '</a>';
+				attrib_string += '<span property="cc:attributionName">' + author + '</span>';
+				
+			}else{
+				
+				document.getElementById("container").innerHTML += "<p style=\"font-size:80%\"> Author: " + author + "</p>";
+				attrib_string += '<span property="cc:attributionName">' + attribution_url + '</span>';
+				
+			}
+			
+		}
+		
+		document.getElementById("container").innerHTML += "<p style=\"font-size:80%\"> License: <a target=\"_blank\" href=\"" + license_link + "\">" + license + "</a></p>";
+		
+		attrib_string +='<a rel="license" href="' + license_link + '">' + license + " / " + license_shorthand + '</a>';
+		attrib_string = "<div xmlns:dc=\"http://dublincore.org/2010/10/11/dcterms.rdf#\" xmlns:cc\"http://creativecommons.org/#ns\" about=\"" + url + "\">" + attrib_string + "</a>";
+		
+		document.getElementById("container").innerHTML += "<textarea rows=\"7\" cols=\"20\">" + attrib_string + "</textarea>";
+		
+	   
+      }
+    </script>  
+  </head>
+  <body onload="init();" style="font-family:arial; width:600px; height:auto">
+    <div id="container"></div>
+  </body>
+</html>  
