@@ -1,0 +1,143 @@
+<script type="text/javascript">
+
+  var first_run = true;
+  var RDFa_cache = "";
+  var cached_namespaces = new Array("http://dublincore.org/2010/10/11/dcterms.rdf#",
+  									"http://creativecommons.org/#ns");
+  
+  function RDFA_get(url){
+  	
+	url_cached = false;
+  	
+	for(var x=0;x<cached_namespaces.length;x++){
+		
+		if(cached_namespaces[x]==url){
+			
+			url_cached = true;
+			
+		}
+		
+	}
+  
+    if (!url_cached) {
+	
+		var req = new XMLHttpRequest();
+		
+		req.open("GET", url, true);
+		
+		req.onload = function(){
+		
+			if (req.readyState == 4) {
+			
+				RDFa_cache += req.responseText;
+				cached_namespaces.push(url)
+				
+			}
+			
+		}
+		
+		req.send(null);
+		
+	}
+  	
+  }   
+  
+  
+  function get_cc(url){
+  	
+		attribute_info.license_link = url;
+  	
+		var req = new XMLHttpRequest();
+		
+		req.open("GET", url, true);
+		
+		req.onload = function(){
+		
+			if (req.readyState == 4) {
+			
+				var data = req.responseText;
+				
+				data = data.split("</title>");
+				
+				data = data[0].split("<title>")
+				
+				data = data[1].split("&mdash;");	
+				
+				attribute_info.license_link = url;
+				attribute_info.license = data[1];					
+				attribute_info.license_shorthand = data[2].split("\n").join("");
+				
+			}
+			
+		}
+		
+		req.send(null);
+	
+  }
+	  
+  if(first_run){
+  	
+		RDFA_get("http://dublincore.org/2010/10/11/dcterms.rdf#");
+		RDFA_get("http://creativecommons.org/#ns");
+		first_run = false;
+
+  }
+  	
+	
+	
+  var html = '';
+  
+  var attribute_info = {
+  	
+	title : "",
+	url : "",
+	author : "",
+	license : "",
+	license_link : "",
+	type : "",
+	attribution_url : "",
+	license_shorthand : ""	
+	
+  };
+  
+  var request_url = false;
+  
+  chrome.extension.onRequest.addListener(
+    function(request, sender, sendResponse) {	
+
+	  if(request.data == "title"){
+	  	
+		attribute_info.title = request.title;	
+	  	
+	  }else if(request.data == "url"){
+	  	
+		attribute_info.url = request.url;
+	  	
+	  }else if(request.license == "namespace"){
+	  	
+		request_url = true;
+		
+		get_cc(request.url);	
+	  	
+	  }else if (request.show == "icon") {
+	  	
+		for(x in request.html){
+			
+			switch(request.html[x][1]){
+				
+				case "title": attribute_info.title = request.html[x][2]; break;
+				case "license": attribute_info.license_link = request.html[x][2]; break;
+				case "attributionName": attribute_info.author = request.html[x][2]; break;
+				case "attributionURL": attribute_info.attribution_url = request.html[x][2]; break;
+				
+			}
+			
+		}
+	  	
+		chrome.pageAction.show(sender.tab.id);
+		
+      }     
+      sendResponse({});
+  }); 
+         
+</script>
