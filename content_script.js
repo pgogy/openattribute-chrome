@@ -77,8 +77,9 @@ while (n) {
 			
 			if (n.attributes.length != 1) {
 			
-				var attr_names = ['about', 'src', 'resource', 'href', 'instanceof', 'typeof', 'rel', 'rev', 'property', 'content', 'datatype'];
+				var attr_names = ['license cc:license', 'about', 'src', 'resource', 'href', 'instanceof', 'typeof', 'rel', 'rev', 'property', 'content', 'datatype'];
 				rdfa_found = 0;
+				
 				for (var i = 0; i < attr_names.length; i++) {
 				
 					if (n.getAttribute(attr_names[i]) != null) {
@@ -103,7 +104,13 @@ while (n) {
 								
 							}
 							
-							if (n.getAttribute(attr_names[i]).indexOf("license") != -1 || n.getAttribute(attr_names[i]) == "copyright") {
+							if (n.getAttribute(attr_names[i]) == "dc:type") {
+							
+								break;
+								
+							}
+														
+							if (attr_names[i] == "rel" && n.getAttribute(attr_names[i]).indexOf("license") != -1) {
 							
 								value = n.getAttribute("href");
 								attribute = "license";
@@ -122,8 +129,20 @@ while (n) {
 								
 								if (attribute == "") {
 								
-									attribute = n.getAttribute(attr_names[i]);
-									
+									if(n.getAttribute("property")=="cc:attributionName"&&n.getAttribute("rel")=="cc:attributionURL"){
+										
+										attribute = n.getAttribute(attr_names[i]);
+										triple_array = Array(asset, "cc:attributionName", n.innerHTML);
+										add_triple(triple_array);
+										attribute = "attributionURL";
+										
+										
+									}else{
+										
+										attribute = n.getAttribute(attr_names[i]);	
+										
+									}
+																		
 								}
 								
 							}
@@ -134,13 +153,13 @@ while (n) {
 								
 							}
 							
-							if (attribute == "attributionName") {
+							if (attribute == "attributionURL") {
 							
 								value = n.getAttribute("href")
 								
 							}
 							
-							if (attribute == "attributionURL") {
+							if (attribute == "attributionName") {
 							
 								value = n.innerHTML;
 								
