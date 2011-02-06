@@ -133,6 +133,16 @@
 			}
 			
 		}
+		
+		if (localStorage["firstrun_pagedisplay"]==undefined) {
+		
+			localStorage["firstrun_pagedisplay"] = true;
+		
+			chrome.tabs.create({
+				url: "http://openattribute.com/first-run-chrome/"
+			});		
+			
+		}
 	  	
 		chrome.pageAction.show(sender.tab.id);
 		

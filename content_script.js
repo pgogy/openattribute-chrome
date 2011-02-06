@@ -9,7 +9,7 @@ chrome.extension.sendRequest({data: "title", title: document.title});
 chrome.extension.sendRequest({data: "url", url: document.location.href});
 
 function add_triple(data_triple){
-	
+		
 	if (triple_store.length == 0) {
 	
 		triple_store.push(data_triple);
@@ -238,10 +238,8 @@ while (n) {
 	
 }
 
-if(license_found){
+if(license_found){	
 	
 	chrome.extension.sendRequest({show: "icon", html: triple_store});
 	
-}
-	
-    
+}    

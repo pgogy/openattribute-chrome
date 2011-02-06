@@ -1,6 +1,27 @@
 <html>
   <head>
     <script type="text/javascript">
+    	
+	  function toggle(obj){
+	  	
+		if(obj.style.display=="block"){
+			
+			obj.style.display="none";
+			obj.style.height="0px";
+			
+		}else{
+			
+			obj.style.display="block";
+			obj.style.height="auto";
+			document.getElementById("attribtext").focus(); 
+			document.getElementById("attribtext").select();
+			document.execCommand('copy');
+			
+		}
+		
+	  }	
+		
+	
       function init() {
 		
 		var bkg = chrome.extension.getBackgroundPage(); 
@@ -13,11 +34,19 @@
 		author = bkg.attribute_info.author;
 		attribution_url = bkg.attribute_info.attribution_url;
 		
+		non_html_attrib_string = "";
+		
 		document.getElementById("container").innerHTML = "<p style=\"font-weight:bold\">" + title + "</p>";
 		attrib_string = '<span property="dct:title">' + title + '</span>';
 		
+		non_html_attrib_string = title + " taken from " + url + "\n";
+		
 		document.getElementById("container").innerHTML += "<p style=\"font-size:80%\"> Source : " + url + "</p>";
-
+		
+		document.getElementById("container").innerHTML += "<p style=\"font-size:80%\"> License: <a target=\"_blank\" href=\"" + license_link + "\">" + license + "</a></p>";
+		
+		attrib_string_light = title + " : taken from - " + url;
+		
 	    if(author!=""){
 			
 			if(attribution_url!=""){
@@ -32,20 +61,66 @@
 				
 			}
 			
+			attrib_string_light += "\nAuthor: " + author + " ";
+			
 		}
 		
-		document.getElementById("container").innerHTML += "<p style=\"font-size:80%\"> License: <a target=\"_blank\" href=\"" + license_link + "\">" + license + "</a></p>";
+		document.getElementById("container").innerHTML += "<form><input type=\"button\" value=\"More Information\" onclick=\"javascript:toggle(document.getElementById('extrainfodiv'));\" /></form>";
 		
-		attrib_string +='<a rel="license" target=\"_blank\" href="' + license_link + '">' + license + " / " + license_shorthand + '</a>';
+		attrib_string_light += "\n" + license_link;
+		
+		l_s = license_shorthand.split("  ").join(" ");
+		
+		l_s = l_s.split("  ")
+		
+		cc_l_s = l_s[1];
+		
+		l_s = l_s.join(" ");
+		
+		attrib_string +='<a rel="license" target=\"_blank\" href="' + license_link + '">' + license + " / " + l_s + '</a>';
 		attrib_string = "<div xmlns:dc=\"http://purl.org/dc/terms/\" xmlns:cc\"http://creativecommons.org/#ns\" about=\"" + url + "\">" + attrib_string + "</a>";
 		
-		document.getElementById("container").innerHTML += "<textarea rows=\"7\" cols=\"20\">" + attrib_string + "</textarea>";
+		non_html_attrib_string += license.split("\n").join("") + " / " + l_s + "\n";
+	
+		switch (cc_l_s.toLowerCase()) {
+			case "by":
+			case "by-sa":
+			case "mark":
+			case "zero":
+			case "publicdomain":
+	    		license_color = "green";
+	    		break;
+	    
+			case "by-nc":
+			case "by-nd":
+			case "by-nc-nd":
+			case "by-nc-sa":
+			case "sampling+":
+			case "nc-sampling+":
+	    		license_color = "yellow";
+	    	break;
+	    
+			case "sampling":
+			case "devnations":
+	    		license_color = "red";
+	    	break;
+		}
 		
+		document.getElementById("colorbar").style.backgroundColor = license_color;
+		
+		document.getElementById("extrainfodiv").innerHTML += "<p style=\"font-size:80%\">Basic Attribution</p><textarea rows=\"7\" id=\"attribtext\" cols=\"70\">" + attrib_string_light + "</textarea>";
+		
+		document.getElementById("extrainfodiv").innerHTML += "<p style=\"font-size:80%\">RDFa Attribution</p><textarea rows=\"7\" id=\"attribtextRDFA\" cols=\"70\">" + attrib_string + "</textarea>";
 	   
       }
     </script>  
   </head>
-  <body onload="init();" style="font-family:arial; width:600px; height:auto">
-    <div id="container"></div>
+  <body onload="init();" style="font-family:arial; width:600px;">
+    <div id="container"> 
+    </div>
+	<div id="extrainfodiv" style="display:none;">
+	</div>
+	<div id="colorbar" style="height:25px; background-color:red">
+	</div>
   </body>
 </html>  
