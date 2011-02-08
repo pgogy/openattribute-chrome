@@ -4,6 +4,8 @@
   var RDFa_cache = "";
   var cached_namespaces = new Array("http://purl.org/dc/terms/",
   									"http://creativecommons.org/#ns");
+									
+  var open_urls = {}; 									
   
   function RDFA_get(url){
   	
@@ -43,7 +45,7 @@
   }   
   
   
-  function get_cc(url){
+  function get_cc(url,site){
   	
 		attribute_info.license_link = url;
   	
@@ -63,9 +65,9 @@
 				
 				data = data[1].split("&mdash;");	
 				
-				attribute_info.license_link = url;
-				attribute_info.license = data[1];					
-				attribute_info.license_shorthand = data[2].split("\n").join("");
+				url_cache[site]["license_link"] = url;
+				url_cache[site]["license"] = data[1];
+				url_cache[site]["license_shorthand"] = data[2].split("\n").join("");
 				
 			}
 			
@@ -100,35 +102,87 @@
 	
   };
   
+  var url_cache = {};
+  
+  var active_data = "";
+  
   var request_url = false;
   
   chrome.extension.onRequest.addListener(
+  
     function(request, sender, sendResponse) {	
 
 	  if(request.data == "title"){
-	  	
-		attribute_info.title = request.title;	
+		
+		url_cache[request.url]["title"] = request.title;
 	  	
 	  }else if(request.data == "url"){
 	  	
-		attribute_info.url = request.url;
+		url_cache[request.url] = {
+			
+			title : "",
+			url : "",
+			author : "",
+			license : "",
+			license_link : "",
+			type : "",
+			attribution_url : "",
+			license_shorthand : ""
+			
+		};
+		
+		url_cache[request.url]["url"] = request.url;
+		
+		url_cache[request.url]["tab_no"] = curr_tab;
 	  	
 	  }else if(request.license == "namespace"){
 	  	
 		request_url = true;
 		
-		get_cc(request.url);	
+		get_cc(request.url, request.site);	
+	  	
+	  }else if(request.wanting == "url_please"){
+	  	
+		curr_tab=sender.tab.id;
+		
+		chrome.pageAction.show(sender.tab.id);	
+	  	
+	  }else if(request.wanting == "tab_id"){
+		
+		chrome.windows.getCurrent(function(window){
+	
+			for(x in url_cache){
+				
+				if(url_cache[x]["tab_no"]==curr_tab){
+					
+					active_data = url_cache[x];
+					break;
+					
+				}		
+				
+			}
+			
+			chrome.tabs.sendRequest(sender.tab.id, active_data, function(){
+				
+							
+			
+				}
+			
+			);
+			
+		})
+			
 	  	
 	  }else if (request.show == "icon") {
-	  	
+		
 		for(x in request.html){
 			
 			switch(request.html[x][1]){
 				
-				case "title": attribute_info.title = request.html[x][2]; break;
-				case "license": attribute_info.license_link = request.html[x][2]; break;
-				case "attributionName": attribute_info.author = request.html[x][2]; break;
-				case "attributionURL": attribute_info.attribution_url = request.html[x][2]; break;
+				case "title": url_cache[request.url_to_show]["title"] = request.html[x][2]; break;
+				case "license": url_cache[request.url_to_show]["license"] = request.html[x][2]; break;
+				case "attributionName": url_cache[request.url_to_show]["attributionName"] = request.html[x][2]; break;
+				case "attributionURL": url_cache[request.url_to_show]["attributionURL"] = request.html[x][2]; break;
 				
 			}
 			
@@ -143,11 +197,28 @@
 			});		
 			
 		}
-	  	
-		chrome.pageAction.show(sender.tab.id);
+		
+		curr_tab = sender.tab.id;
+		
+		chrome.tabs.connect(sender.tab.id)
+		
+		chrome.tabs.sendRequest(sender.tab.id, "url_gimme_gimme", function(){
+						
+			
+			}
+			
+		);		
 		
       }     
       sendResponse({});
-  }); 
+  });
+  
+  var curr_tab = "";
+  
+  chrome.tabs.onSelectionChanged.addListener(function(tabId, selectInfo) {
+  	
+		curr_tab = tabId;	
+	
+  });  
          
 </script>

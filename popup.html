@@ -20,19 +20,45 @@
 		}
 		
 	  }	
+	  
+	  chrome.extension.onRequest.addListener(
+  
+    	function(request, sender, sendResponse) {
+		
+			if(request){
+				
+				alert("POPUP " + request);
+				
+			}
+			
+		}
+		
+	  );
 		
 	
-      function init() {
+      function init(){
+	  	
+			chrome.extension.sendRequest({wanting:"tab_id"}, function(data){
+				
+				populate_window(data);
+				
+			});
+	  
+	  }
+	  
+	  function populate_window(data){
 		
 		var bkg = chrome.extension.getBackgroundPage(); 
 		
-		title = bkg.attribute_info.title;
-		url = bkg.attribute_info.url;
-		license = bkg.attribute_info.license;
-		license_link = bkg.attribute_info.license_link;
-		license_shorthand = bkg.attribute_info.license_shorthand ;
-		author = bkg.attribute_info.author;
-		attribution_url = bkg.attribute_info.attribution_url;
+		obj = bkg.active_data;
+		
+		title = bkg.active_data["title"];
+		url = bkg.active_data["url"];
+		license = bkg.active_data["license"];
+		license_link = bkg.active_data["license_link"];
+		license_shorthand = bkg.active_data["license_shorthand"];
+		author = bkg.active_data["author"];
+		attribution_url = bkg.active_data["attribution_url"];
 		
 		non_html_attrib_string = "";
 		
@@ -111,8 +137,9 @@
 		document.getElementById("extrainfodiv").innerHTML += "<p style=\"font-size:80%\">Basic Attribution</p><textarea rows=\"7\" id=\"attribtext\" cols=\"70\">" + attrib_string_light + "</textarea>";
 		
 		document.getElementById("extrainfodiv").innerHTML += "<p style=\"font-size:80%\">RDFa Attribution</p><textarea rows=\"7\" id=\"attribtextRDFA\" cols=\"70\">" + attrib_string + "</textarea>";
-	   
-      }
+
+	  }
+	  	
     </script>  
   </head>
   <body onload="init();" style="font-family:arial; width:600px;">
