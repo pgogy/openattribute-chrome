@@ -104,7 +104,7 @@
 		l_s = l_s.join(" ");
 		
 		attrib_string +='<a rel="license" target=\"_blank\" href="' + license_link + '">' + license + " / " + l_s + '</a>';
-		attrib_string = "<div xmlns:dc=\"http://purl.org/dc/terms/\" xmlns:cc\"http://creativecommons.org/#ns\" about=\"" + url + "\">" + attrib_string + "</a>";
+		attrib_string = "<div xmlns:dc=\"http://purl.org/dc/terms/\" xmlns:cc\"http://creativecommons.org/#ns\" about=\"" + url + "\">" + attrib_string + "</div>";
 		
 		non_html_attrib_string += license.split("\n").join("") + " / " + l_s + "\n";
 	
