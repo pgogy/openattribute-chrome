@@ -27,7 +27,6 @@
 		
 			if(request){
 				
-				alert("POPUP " + request);
 				
 			}
 			
@@ -58,6 +57,13 @@
 		license_link = bkg.active_data["license_link"];
 		license_shorthand = bkg.active_data["license_shorthand"];
 		author = bkg.active_data["author"];
+		
+		if(author==""){
+			
+			author = bkg.active_data["attributionName"];
+			
+		}
+		
 		attribution_url = bkg.active_data["attribution_url"];
 		
 		non_html_attrib_string = "";
@@ -82,8 +88,8 @@
 				
 			}else{
 				
-				document.getElementById("container").innerHTML += "<p style=\"font-size:80%\"> Author: " + author + "</p>";
-				attrib_string += '<span property="cc:attributionName">' + attribution_url + '</span>';
+				document.getElementById("container").innerHTML += "<p style=\"font-size:80%\" property=\"cc:attributionName\"> Author: " + author + "</p>";
+				attrib_string += '<span property="cc:attributionUrl">' + attribution_url + '</span><span property=\"cc:attributionName\">' + author + '</span>';
 				
 			}
 			
