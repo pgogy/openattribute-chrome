@@ -25,10 +25,6 @@
   
     	function(request, sender, sendResponse) {
 		
-			if(request){
-				
-				
-			}
 			
 		}
 		
@@ -39,13 +35,13 @@
 	  	
 			chrome.extension.sendRequest({wanting:"tab_id"}, function(data){
 				
-				populate_window(data);
+				populate_window();
 				
 			});
 	  
 	  }
 	  
-	  function populate_window(data){
+	  function populate_window(){
 		
 		var bkg = chrome.extension.getBackgroundPage(); 
 		
