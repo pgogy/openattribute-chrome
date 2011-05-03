@@ -150,43 +150,47 @@
 	  }else if(request.wanting == "tab_id"){
 		
 		chrome.windows.getCurrent(function(window){
-	
+			
 			for(x in url_cache){
 				
-				if(url_cache[x]["tab_no"]==curr_tab){
+				if(url_cache[x]["tab_id"]==curr_tab){
 					
-					active_data = url_cache[x];
-					break;
+					active_data = url_cache[x];		
+					break;		
 					
-				}		
+				}
 				
 			}
-			
-			chrome.tabs.sendRequest(sender.tab.id, active_data, function(){
-				
-							
-			
-				}
-			
-			);
 			
 		})
 			
 	  	
 	  }else if (request.show == "icon") {
+	  	
+		for (x in request.html) {
 		
-		for(x in request.html){
+			switch (request.html[x][1]) {
 			
-			switch(request.html[x][1]){
-				
-				case "title": url_cache[request.url_to_show]["title"] = request.html[x][2]; break;
-				case "license": url_cache[request.url_to_show]["license"] = request.html[x][2]; break;
-				case "attributionName": url_cache[request.url_to_show]["attributionName"] = request.html[x][2]; break;
-				case "attributionURL": url_cache[request.url_to_show]["attributionURL"] = request.html[x][2]; break;
-				
+				case "title":
+					url_cache[request.url_to_show]["title"] = request.html[x][2];
+					break;
+				case "license":
+					url_cache[request.url_to_show]["license"] = request.html[x][2];
+					break;
+				case "attributionName":
+					url_cache[request.url_to_show]["attributionName"] = request.html[x][2];
+					break;
+				case "attributionURL":
+					url_cache[request.url_to_show]["attributionURL"] = request.html[x][2];
+					break;
+					
 			}
 			
 		}
+		
+		url_cache[request.url_to_show]["tab_id"] = sender.tab.id;
+		
+		active_data = url_cache[request.url_to_show];	
 		
 		if (localStorage["firstrun_pagedisplay"]==undefined) {
 		
@@ -197,8 +201,6 @@
 			});		
 			
 		}
-		
-		curr_tab = sender.tab.id;
 		
 		chrome.tabs.connect(sender.tab.id)
 		
