@@ -253,7 +253,7 @@ switch(window.location.toString().split(".")[1]){
 					photo_by_author = photo_by_user.split('<');
 					if(logged_in_user==photo_by_author[0]){
 						
-						triple_array = Array(window.location.toString(), "attributionName", logged_in_user);
+						triple_array = Array(window.location.toString(), "author", logged_in_user);
 						add_triple(triple_array)
 						triple_array = Array();
 						
