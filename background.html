@@ -183,9 +183,23 @@
 				case "attributionURL":
 					url_cache[request.url_to_show]["attributionURL"] = request.html[x][2];
 					break;
+				case "author":
+					url_cache[request.url_to_show]["author"] = request.html[x][2];
+					break;
 					
 			}
 			
+		}
+		
+		for(x in url_cache){
+				
+			if(url_cache[x]["tab_id"]==sender.tab.id){
+					
+				url_cache[x]["tab_id"] = "";		
+				break;		
+					
+			}
+				
 		}
 		
 		url_cache[request.url_to_show]["tab_id"] = sender.tab.id;
