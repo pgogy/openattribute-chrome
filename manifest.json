@@ -12,11 +12,11 @@
    "name": "OpenAttribute",
    "page_action": {
       "default_icon": "icon.png",
-	  "default_title": "Get Attribution Info from a page to allow for attributing materials",
+	  "default_title": "Get Attribution Info (RDFa) from a page to allow for attributing materials",
       "popup": "popup.html"
    },
    "permissions": [ "tabs",
    					"<all_urls>"
 				  ],
-   "version" : "0.5"
+   "version" : "0.6"
 }

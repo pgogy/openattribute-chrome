@@ -1,5 +1,6 @@
 triplesHtml = "";
 
+
 var n = document;
 var rootNode = n;
 var triple_store = new Array();
