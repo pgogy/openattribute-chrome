@@ -47,55 +47,88 @@
 		
 		obj = bkg.active_data;
 		
-		title = bkg.active_data["title"];
-		url = bkg.active_data["url"];
-		license = bkg.active_data["license"];
-		license_link = bkg.active_data["license_link"];
-		license_shorthand = bkg.active_data["license_shorthand"];
-		author = bkg.active_data["author"];
+		title = bkg.active_data["title"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");
+		url = bkg.active_data["url"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");
+		license = bkg.active_data["license"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");
+		license_link = bkg.active_data["license_link"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");
+		license_shorthand = bkg.active_data["license_shorthand"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");
+		author = bkg.active_data["author"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");
 		
+		if(author.length==0){
 		
-		if(author==""){
+			if(bkg.active_data["attributionName"]!=undefined){
 			
-			author = bkg.active_data["attributionName"];
+				author = bkg.active_data["attributionName"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");
+			
+			}
 			
 		}
 		
-		attribution_url = bkg.active_data["attribution_url"];
-		
+		attribution_url = bkg.active_data["attribution_url"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");
+	
 		non_html_attrib_string = "";
 		
-		document.getElementById("container").innerHTML = "<p style=\"font-weight:bold\">" + title + "</p>";
+		parent_node = document.getElementById("attrib_iframe").contentDocument;
+		
+		var page_title = document.createElement("P");
+		page_title.style.fontWeight="bold";
+		
+		newtext=document.createTextNode("Title : " + title);
+		
+		page_title.appendChild(newtext);
+		parent_node.body.appendChild(page_title);	
+		
 		attrib_string = '<span property="dct:title">' + title + '</span>';
 		
 		non_html_attrib_string = title + " taken from " + url + "\n";
 		
-		document.getElementById("container").innerHTML += "<p style=\"font-size:80%\"> Source : " + url + "</p>";
+		var page_url = document.createElement("P");
+		newtext=document.createTextNode("Source : " + url);
+		page_url.appendChild(newtext);
+		parent_node.body.appendChild(page_url);	
 		
-		document.getElementById("container").innerHTML += "<p style=\"font-size:80%\"> License: <a target=\"_blank\" href=\"" + license_link + "\">" + license + "</a></p>";
+		var page_license = document.createElement("P");		
+		var page_license_text_holder = document.createElement("SPAN");		
+		page_license_text_holder.innerText = "license : ";		
+		page_license.appendChild(page_license_text_holder);		
+		parent_node.body.appendChild(page_license);	
 		
+		var page_license_text_holder_link = document.createElement("A");		
+		page_license_text_holder_link.href = license_link;
+		page_license_text_holder_link.innerText = license;
+		page_license.appendChild(page_license_text_holder_link);
+		parent_node.body.appendChild(page_license);	
+
 		attrib_string_light = title + " : taken from - " + url;
 		
-	    if(author!=""){
+	    if(author!=undefined&&attribution_url!=undefined){
 			
-			if(attribution_url!=""){
-				
-				document.getElementById("container").innerHTML += "<p style=\"font-size:80%\"> Author: <a target=\"_blank\" href=\"" + attribution_url + "\">" + author + "</a></p>";
-				attrib_string += '<a rel="cc:attributionName" ' + 'href="' + attribution_url + '" target=\"_blank\">' + author + '</a>';
-				
-			}else{
-				
-				document.getElementById("container").innerHTML += "<p style=\"font-size:80%\" property=\"cc:attributionName\"> Author: " + author + "</p>";
-				attrib_string += '<span property="cc:attributionUrl">' + attribution_url + '</span><span property=\"cc:attributionName\">' + author + '</span>';
-				
-			}
+			var page_attrib = document.createElement("P");		
+			var page_attrib_text_holder = document.createElement("SPAN");		
+			page_attrib_text_holder.innerText = "Author : ";		
+			page_attrib.appendChild(page_attrib_text_holder);		
+			parent_node.body.appendChild(page_attrib);	
 			
+			var page_attrib_text_holder_link = document.createElement("A");		
+			page_attrib_text_holder_link.href = attribution_url;
+			page_attrib_text_holder_link.innerText = author;
+			page_attrib.appendChild(page_attrib_text_holder_link);
+			parent_node.body.appendChild(page_license);	
+		
+			attrib_string += '<a rel="cc:attributionName" ' + 'href="' + attribution_url + '" target=\"_blank\">' + author + '</a>';
+				
 			attrib_string_light += "\nAuthor: " + author + " ";
 			
 		}
 		
-		document.getElementById("container").innerHTML += "<form><input type=\"button\" value=\"More Information\" onclick=\"javascript:toggle(document.getElementById('extrainfodiv'));\" /></form>";
-		
+		var page_reveal_segment = document.createElement("FORM");		
+		var page_reveal_segment_button = document.createElement("INPUT");	
+		page_reveal_segment_button.setAttribute("type","button");
+		page_reveal_segment_button.setAttribute("onClick","javascript:document.getElementById('extra').style.display=\"block\";");
+		page_reveal_segment_button.setAttribute("value","More Information");	
+		page_reveal_segment.appendChild(page_reveal_segment_button);		
+		parent_node.body.appendChild(page_reveal_segment);	
+
 		attrib_string_light += "\n" + license_link;
 		
 		l_s = license_shorthand.split("  ").join(" ");
@@ -135,22 +168,44 @@
 	    	break;
 		}
 		
-		document.getElementById("colorbar").style.backgroundColor = license_color;
+		var extra_holder = document.createElement("DIV");	
+		extra_holder.style.display="none";
+		extra_holder.id = "extra";
+		parent_node.body.appendChild(extra_holder);	
 		
-		document.getElementById("extrainfodiv").innerHTML += "<p style=\"font-size:80%\">Basic Attribution</p><textarea rows=\"7\" id=\"attribtext\" cols=\"70\">" + attrib_string_light + "</textarea>";
+		var page_license_colour = document.createElement("P");			
+		page_license_colour.style.width="80%";
+		page_license_colour.style.height="30px";	
+		page_license_colour.style.backgroundColor = license_color;
+		extra_holder.appendChild(page_license_colour);	
 		
-		document.getElementById("extrainfodiv").innerHTML += "<p style=\"font-size:80%\">RDFa Attribution</p><textarea rows=\"7\" id=\"attribtextRDFA\" cols=\"70\">" + attrib_string + "</textarea>";
+		var basic_attribution = document.createElement("P");
+		newtext=document.createTextNode("Basic Attribution");
+		basic_attribution.appendChild(newtext);
+		extra_holder.appendChild(basic_attribution);
 
+		var basic_attribution_text = document.createElement("TEXTAREA");
+		basic_attribution_text.setAttribute("rows","7");
+		basic_attribution_text.setAttribute("cols","60");
+		basic_attribution_text.innerText = attrib_string_light;
+		extra_holder.appendChild(basic_attribution_text);	
+		
+		var rdfa_attribution = document.createElement("P");
+		newtext=document.createTextNode("RDFa Attribution");
+		rdfa_attribution.appendChild(newtext);
+		extra_holder.appendChild(rdfa_attribution);
+
+		var rdfa_attribution_text = document.createElement("TEXTAREA");
+		rdfa_attribution_text.setAttribute("rows","7");
+		rdfa_attribution_text.setAttribute("cols","60");
+		rdfa_attribution_text.innerText = attrib_string;
+		extra_holder.appendChild(rdfa_attribution_text);	
+		
 	  }
 	  	
     </script>  
   </head>
-  <body onload="init();" style="font-family:arial; width:600px;">
-    <div id="container"> 
-    </div>
-	<div id="extrainfodiv" style="display:none;">
-	</div>
-	<div id="colorbar" style="height:25px; background-color:red">
-	</div>
+  <body onload="init();" style="font-family:arial; width:600px;height:600px;">
+	<iframe name="attrib_iframe" style="font-family:arial; width:600px; height:600px; border:none;" id="attrib_iframe"><html><head><style>html{font-family:"arial";}</style></head></html><body></body></iframe>
   </body>
 </html>  
