@@ -124,18 +124,26 @@
 		var page_reveal_segment = document.createElement("FORM");		
 		var page_reveal_segment_button = document.createElement("INPUT");	
 		page_reveal_segment_button.setAttribute("type","button");
-		page_reveal_segment_button.setAttribute("onClick","javascript:document.getElementById('extra').style.display=\"block\";");
+		page_reveal_segment_button.setAttribute("onClick","javascript:document.getElementById('extra').style.display='block';");
 		page_reveal_segment_button.setAttribute("value","More Information");	
 		page_reveal_segment.appendChild(page_reveal_segment_button);		
-		parent_node.body.appendChild(page_reveal_segment);	
+		parent_node.body.appendChild(page_reveal_segment);
 
-		attrib_string_light += "\n" + license_link;
+		attrib_string_light += "\n" + license_link;		
+				
+		if(license_shorthand.indexOf("  ")!=-1){
 		
-		l_s = license_shorthand.split("  ").join(" ");
+			l_s = license_shorthand.split("  ").join(" ");
+			
+		}else{
 		
-		l_s = l_s.split("  ")
+			l_s = license_shorthand;
 		
-		cc_l_s = l_s[1];
+		}
+		
+		l_s = l_s.split(" ");
+		
+		cc_l_s = l_s[2];
 		
 		l_s = l_s.join(" ");
 		
@@ -143,69 +151,87 @@
 		attrib_string = "<div xmlns:dc=\"http://purl.org/dc/terms/\" xmlns:cc\"http://creativecommons.org/#ns\" about=\"" + url + "\">" + attrib_string + "</div>";
 		
 		non_html_attrib_string += license.split("\n").join("") + " / " + l_s + "\n";
-	
-		switch (cc_l_s.toLowerCase()) {
-			case "by":
-			case "by-sa":
-			case "mark":
-			case "zero":
-			case "publicdomain":
-	    		license_color = "green";
-	    		break;
-	    
-			case "by-nc":
-			case "by-nd":
-			case "by-nc-nd":
-			case "by-nc-sa":
-			case "sampling+":
-			case "nc-sampling+":
-	    		license_color = "yellow";
-	    	break;
-	    
-			case "sampling":
-			case "devnations":
-	    		license_color = "red";
-	    	break;
-		}
 		
+		license_color="";
+		
+		if(cc_l_s!=undefined){
+		
+			switch (cc_l_s.toLowerCase()) {
+				case "by":
+				case "by-sa":
+				case "mark":
+				case "zero":
+				case "publicdomain":
+					license_color = "green";
+					break;
+			
+				case "by-nc":
+				case "by-nd":
+				case "by-nc-nd":
+				case "by-nc-sa":
+				case "sampling+":
+				case "nc-sampling+":
+					license_color = "yellow";
+				break;
+			
+				case "sampling":
+				case "devnations":
+					license_color = "red";
+				break;
+			}
+			
+		}
+	
 		var extra_holder = document.createElement("DIV");	
 		extra_holder.style.display="none";
 		extra_holder.id = "extra";
 		parent_node.body.appendChild(extra_holder);	
+				
+		if(license_color!=""){		
+				
+			var page_license_colour = document.createElement("P");			
+			page_license_colour.style.width="80%";
+			page_license_colour.style.height="30px";	
+			page_license_colour.style.backgroundColor = license_color;
+			extra_holder.appendChild(page_license_colour);	
 		
-		var page_license_colour = document.createElement("P");			
-		page_license_colour.style.width="80%";
-		page_license_colour.style.height="30px";	
-		page_license_colour.style.backgroundColor = license_color;
-		extra_holder.appendChild(page_license_colour);	
+		}
 		
 		var basic_attribution = document.createElement("P");
 		newtext=document.createTextNode("Basic Attribution");
 		basic_attribution.appendChild(newtext);
 		extra_holder.appendChild(basic_attribution);
 
-		var basic_attribution_text = document.createElement("TEXTAREA");
-		basic_attribution_text.setAttribute("rows","7");
-		basic_attribution_text.setAttribute("cols","60");
-		basic_attribution_text.innerText = attrib_string_light;
-		extra_holder.appendChild(basic_attribution_text);	
+		if(attrib_string_light!=undefined){
+
+			var basic_attribution_text = document.createElement("TEXTAREA");
+			basic_attribution_text.setAttribute("rows","7");
+			basic_attribution_text.setAttribute("cols","60");
+			basic_attribution_text.innerText = attrib_string_light;
+			extra_holder.appendChild(basic_attribution_text);	
+		
+		}
 		
 		var rdfa_attribution = document.createElement("P");
 		newtext=document.createTextNode("RDFa Attribution");
 		rdfa_attribution.appendChild(newtext);
 		extra_holder.appendChild(rdfa_attribution);
 
-		var rdfa_attribution_text = document.createElement("TEXTAREA");
-		rdfa_attribution_text.setAttribute("rows","7");
-		rdfa_attribution_text.setAttribute("cols","60");
-		rdfa_attribution_text.innerText = attrib_string;
-		extra_holder.appendChild(rdfa_attribution_text);	
+		if(attrib_string!=undefined){
+
+			var rdfa_attribution_text = document.createElement("TEXTAREA");
+			rdfa_attribution_text.setAttribute("rows","7");
+			rdfa_attribution_text.setAttribute("cols","60");
+			rdfa_attribution_text.innerText = attrib_string;
+			extra_holder.appendChild(rdfa_attribution_text);
+		
+		}
 		
 	  }
 	  	
     </script>  
   </head>
   <body onload="init();" style="font-family:arial; width:600px;height:600px;">
-	<iframe name="attrib_iframe" style="font-family:arial; width:600px; height:600px; border:none;" id="attrib_iframe"><html><head><style>html{font-family:"arial";}</style></head></html><body></body></iframe>
+	<iframe name="attrib_iframe" style="font-family:arial; width:600px; height:600px; border:none;" id="attrib_iframe"><html><head><style>html{font-family:"arial";}</style></head><body></body></html></iframe>
   </body>
 </html>  

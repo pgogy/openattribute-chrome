@@ -18,7 +18,7 @@ function add_triple(data_triple){
 	
 		triple_store.push(data_triple);
 		if(data_triple[1]=="license"){
-			
+				
 			license_found = true;
 			chrome.extension.sendRequest({license: "namespace", url: data_triple[2], site:data_triple[0]});
 			
@@ -271,5 +271,6 @@ switch(window.location.toString().split(".")[1]){
 if(license_found){	
 	
 	chrome.extension.sendRequest({url_to_show: document.location.href, show: "icon", html: triple_store});
+
 	
 }    
