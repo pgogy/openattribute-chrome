@@ -249,18 +249,29 @@ switch(window.location.toString().split(".")[1]){
 	
 	case "flickr": 	var loggedin = document.body.innerHTML.split('data-ywa-name="Account name">');
 					if(loggedin.length!=1){
+					
 						logged_in_user = loggedin[1].split('</a>')[0];
 						var photo_by = document.body.innerHTML.split('<strong class="username">By <a href="/photos/');
-						if(photo_by_user.length!=1){
+						if(photo_by.length!=1){
+						
 							photo_by_user = photo_by[1].split('>')[1];
+							
 							photo_by_author = photo_by_user.split('<');
+							
 							if(logged_in_user==photo_by_author[0]){
 							
 								triple_array = Array(window.location.toString(), "author", logged_in_user);
 								add_triple(triple_array)
 								triple_array = Array();
 							
+							}else{
+							
+								triple_array = Array(window.location.toString(), "author", photo_by_author[0]);
+								add_triple(triple_array)
+								triple_array = Array();
+							
 							}
+							
 						}
 					}
  					break;
