@@ -124,7 +124,7 @@
 		var page_reveal_segment = document.createElement("FORM");		
 		var page_reveal_segment_button = document.createElement("INPUT");	
 		page_reveal_segment_button.setAttribute("type","button");
-		page_reveal_segment_button.setAttribute("onClick","javascript:document.getElementById('extra').style.display='block';");
+		page_reveal_segment_button.setAttribute("onClick","javascript:if(document.getElementById('extra').style.display=='block'){document.getElementById('extra').style.display='none'}else{document.getElementById('extra').style.display='block'};");
 		page_reveal_segment_button.setAttribute("value","More Information");	
 		page_reveal_segment.appendChild(page_reveal_segment_button);		
 		parent_node.body.appendChild(page_reveal_segment);
@@ -225,6 +225,49 @@
 			rdfa_attribution_text.innerText = attrib_string;
 			extra_holder.appendChild(rdfa_attribution_text);
 		
+		}
+		
+		var all_reveal_segment = document.createElement("FORM");		
+		var all_reveal_segment_button = document.createElement("INPUT");	
+		all_reveal_segment_button.setAttribute("type","button");
+		all_reveal_segment_button.setAttribute("onClick","javascript:if(document.getElementById('all_data').style.display=='block'){document.getElementById('all_data').style.display='none'}else{document.getElementById('all_data').style.display='block'};");
+		all_reveal_segment_button.setAttribute("value","All Data");	
+		all_reveal_segment.appendChild(all_reveal_segment_button);		
+		parent_node.body.appendChild(all_reveal_segment);
+		
+		var all_holder = document.createElement("DIV");	
+		all_holder.style.display="none";
+		all_holder.id = "all_data";
+		parent_node.body.appendChild(all_holder);	
+		
+		var all_text_title = document.createElement("P");
+		all_text=document.createTextNode("All Data");
+		all_text_title.appendChild(all_text);
+		all_holder.appendChild(all_text_title);
+		
+		var csv_title = document.createElement("P");
+		csv_text=document.createTextNode("URL,LICENSE,NAME,ATTRIBUTION_URL,AUTHOR");
+		csv_title.appendChild(csv_text);
+		all_holder.appendChild(csv_title);
+		
+		
+		
+		url_data = bkg.url_cache;
+		
+		for(x in url_data){
+				
+			if(url_data[x]['license']!=""){
+			
+				var data_text = document.createElement("P");
+			
+				string = x + "," + url_data[x]['license'] + "," + url_data[x]['license'] + "," + url_data[x]["attributionName"]  + "," + url_data[x]["attributionURL"] + url_data[x]["author"];
+				
+				url_text=document.createTextNode(string);
+				data_text.appendChild(url_text);
+				all_holder.appendChild(data_text);
+					
+			}
+				
 		}
 		
 	  }
