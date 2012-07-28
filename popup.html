@@ -58,13 +58,13 @@
 		
 			if(bkg.active_data["attributionName"]!=undefined){
 			
-				author = bkg.active_data["attributionName"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");
+				author = bkg.active_data["attributionName"];
 			
 			}
 			
 		}
 		
-		attribution_url = bkg.active_data["attribution_url"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");
+		attribution_url = bkg.active_data["attributionURL"];
 	
 		non_html_attrib_string = "";
 		
@@ -101,7 +101,7 @@
 
 		attrib_string_light = title + " : taken from - " + url;
 		
-	    if(author!=undefined&&attribution_url!=undefined){
+	    if(author!=""&&attribution_url!=""){
 			
 			var page_attrib = document.createElement("P");		
 			var page_attrib_text_holder = document.createElement("SPAN");		
