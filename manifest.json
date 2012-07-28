@@ -16,5 +16,5 @@
       "popup": "popup.html"
    },
    "permissions": [ "tabs", "http://*/*", "https://*/*"  ],
-   "version": "0.9"
+   "version": "0.90"
 }
