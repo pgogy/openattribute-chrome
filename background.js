@@ -1,5 +1,3 @@
-<script type="text/javascript">
-
   var first_run = true;
   var RDFa_cache = "";
   var cached_namespaces = new Array("http://purl.org/dc/terms/",
@@ -108,10 +106,10 @@
   
   var request_url = false;
   
-  chrome.extension.onRequest.addListener(
+  chrome.extension.onMessage.addListener(
   
-    function(request, sender, sendResponse) {	
-
+    function(request, sender, sendResponse) {
+	
 	  if(request.data == "title"){
 		
 		url_cache[request.url]["title"] = request.title;
@@ -166,7 +164,7 @@
 			
 	  	
 	  }else if (request.show == "icon") {
-	  	
+ 
 		for (x in request.html) {
 		
 			switch (request.html[x][1]) {
@@ -218,8 +216,7 @@
 		
 		chrome.tabs.connect(sender.tab.id)
 		
-		chrome.tabs.sendRequest(sender.tab.id, "url_gimme_gimme", function(){
-						
+		chrome.tabs.sendMessage(sender.tab.id, "url_gimme_gimme", function(){
 			
 			}
 			
@@ -236,5 +233,4 @@
 		curr_tab = tabId;	
 	
   });  
-         
-</script>
+  

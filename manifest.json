@@ -1,5 +1,7 @@
 {
-   "background_page": "background.html",
+   "background":{
+     "scripts":["background.js"]
+	},
    "content_scripts": [ {
       "js": [ "jquery.min.js","content_script.js" ],
       "matches": [ "http://*/*","https://*/*" ],
@@ -13,8 +15,10 @@
    "page_action": {
       "default_icon": "icon.png",
       "default_title": "Get Attribution Info (RDFa) from a page to allow for attributing materials",
-      "popup": "popup.html"
+      "default_popup": "popup.html"
    },
    "permissions": [ "tabs", "http://*/*", "https://*/*"  ],
-   "version": "0.90"
+   "version": "0.91",
+   "content_security_policy": "script-src 'self'; object-src 'self'",
+   "manifest_version":2
 }
