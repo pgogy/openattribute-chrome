@@ -1,24 +1,25 @@
 {
-   "background":{
-     "scripts":["background.js"]
-	},
+   "background": {
+      "scripts": [ "background.js" ]
+   },
    "content_scripts": [ {
-      "js": [ "jquery.min.js","content_script.js" ],
-      "matches": [ "http://*/*","https://*/*" ],
+      "js": [ "jquery.min.js", "content_script.js" ],
+      "matches": [ "http://*/*", "https://*/*" ],
       "run_at": "document_idle"
    } ],
+   "content_security_policy": "script-src 'self'; object-src 'self'",
    "default_locale": "en_US",
    "icons": {
       "128": "icon.png"
    },
+   "manifest_version": 2,
    "name": "OpenAttribute",
    "page_action": {
       "default_icon": "icon.png",
-      "default_title": "Get Attribution Info (RDFa) from a page to allow for attributing materials",
-      "default_popup": "popup.html"
+      "default_popup": "popup.html",
+      "default_title": "Get Attribution Info (RDFa) from a page to allow for attributing materials"
    },
-   "permissions": [ "tabs", "http://*/*", "https://*/*"  ],
-   "version": "0.91",
-   "content_security_policy": "script-src 'self'; object-src 'self'",
-   "manifest_version":2
+   "permissions": [ "tabs", "http://*/*", "https://*/*" ],
+   "update_url": "http://clients2.google.com/service/update2/crx",
+   "version": "0.92"
 }

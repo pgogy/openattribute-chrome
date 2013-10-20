@@ -114,11 +114,15 @@ if($('[about]')){
 
 if($('[rel*="license"]')[0]){
 
+	alert("HERE I AM");
+
 	if(document.location.href.indexOf("wikipedia.org")!=-1){
 
 		add_triple(Array(document.location.href,"license",$('[rel*="license"]')[1].href));
 		
 	}else{
+	
+		alert("HERE");
 	
 		add_triple(Array(document.location.href,"license",$('[rel*="license"]')[0].href));
 			
@@ -150,26 +154,15 @@ if($('[property="cc:attributionName"]')[0]){
 
 switch(document.location.href.split(".")[1]){
 	
-	case "flickr": 	var photo_by = document.body.innerHTML.split('<strong class="username">By <a href="/photos/');
-	
-					if(photo_by.length!=1){
-						
-						photo_by_user = photo_by[1].split('>')[1];
+	case "flickr": 	author = $('.photo-name-line-2')[0];
+					authorname = author.innerHTML.split("\n").join("");
+					
+					if(authorname.length!=1){
 							
-						photo_by_author = photo_by_user.split('<');	
-							
-						triple_array = Array(document.location.href, "author", photo_by_author[0]);
+						triple_array = Array(document.location.href, "author", authorname);
 						add_triple(triple_array)
 						triple_array = Array();
 						break;
-						
-					}
-					
-					if(logged_in_user==photo_by_author[0]){
-						
-							triple_array = Array(window.location.toString(), "author", logged_in_user);
-							add_triple(triple_array)
-							triple_array = Array();
 						
 					}
 					
