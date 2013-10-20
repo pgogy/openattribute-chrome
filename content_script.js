@@ -114,15 +114,11 @@ if($('[about]')){
 
 if($('[rel*="license"]')[0]){
 
-	alert("HERE I AM");
-
 	if(document.location.href.indexOf("wikipedia.org")!=-1){
 
 		add_triple(Array(document.location.href,"license",$('[rel*="license"]')[1].href));
 		
 	}else{
-	
-		alert("HERE");
 	
 		add_triple(Array(document.location.href,"license",$('[rel*="license"]')[0].href));
 			
