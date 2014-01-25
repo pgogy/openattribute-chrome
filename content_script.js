@@ -73,101 +73,111 @@ namespace_data = "";
 chrome.extension.sendMessage({data: "url", url: document.location.href});
 chrome.extension.sendMessage({data: "title", title: document.title, url: document.location.href});
 
-if($('[about]')){
+setTimeout(function(){
+	parse_html();
+},7000);
 
-	url = $('[about]').attr("about");
-	
-	if(url!=undefined){
-	
-		if(url.indexOf("http")==-1){
-	
-			url = document.location.href;
-	
-		}
-	
-	}else{
-	
-		url = document.location.href;
+function parse_html(){
+
+	if($('[about]')){
+
+		url = $('[about]').attr("about");
 		
+		if(url!=undefined){
+		
+			if(url.indexOf("http")==-1){
+		
+				url = document.location.href;
+		
+			}
+		
+		}else{
+		
+			url = document.location.href;
+			
+		}
+
+		if($('[about] > [rel*="license"]')[0]){
+			
+			add_triple(Array(url,"license",$('[about] > [rel*="license"]')[0].href));
+			license_found = true;
+			
+		}
+			
+		if($('[about] > [rel="cc:attributionURL"]')[0]){
+			
+			add_triple(Array(url,"attributionName",$('[about] > [rel="cc:attributionURL"]')[0].href));
+			
+		}
+			
+		if($('[about] > [property="cc:attributionName"]')[0]){
+		
+			add_triple(Array(url,"attributionName",$('[about] > [property="cc:attributionName"]')[0].innerHTML));
+			
+		}
+
 	}
 
-	if($('[about] > [rel*="license"]')[0]){
+	if($('[rel*="license"]')[0]){
+
+		if(document.location.href.indexOf("wikipedia.org")!=-1){
+
+			add_triple(Array(document.location.href,"license",$('[rel*="license"]')[1].href));
+			
+		}else{
 		
-		add_triple(Array(url,"license",$('[about] > [rel*="license"]')[0].href));
+			add_triple(Array(document.location.href,"license",$('[rel*="license"]')[0].href));
+				
+		}
+		
 		license_found = true;
 		
 	}
-		
-	if($('[about] > [rel="cc:attributionURL"]')[0]){
-		
-		add_triple(Array(url,"attributionName",$('[about] > [rel="cc:attributionURL"]')[0].href));
-		
-	}
-		
-	if($('[about] > [property="cc:attributionName"]')[0]){
-	
-		add_triple(Array(url,"attributionName",$('[about] > [property="cc:attributionName"]')[0].innerHTML));
-		
-	}
 
-}
+	if($('[rel="cc:attributionURL"]')[0]){
 
-if($('[rel*="license"]')[0]){
+		if($('[rel="cc:attributionURL"]')[0].href){
 
-	if(document.location.href.indexOf("wikipedia.org")!=-1){
-
-		add_triple(Array(document.location.href,"license",$('[rel*="license"]')[1].href));
-		
-	}else{
-	
-		add_triple(Array(document.location.href,"license",$('[rel*="license"]')[0].href));
+			add_triple(Array(document.location.href,"attributionURL",$('[rel="cc:attributionURL"]')[0].href));
 			
+		}
+
 	}
-	
-	license_found = true;
-	
-}
 
-if($('[rel="cc:attributionURL"]')[0]){
+	if($('[property="cc:attributionName"]')[0]){
 
-	if($('[rel="cc:attributionURL"]')[0].href){
+		if($('[property="cc:attributionName"]')[0].innerHTML){		
 
-		add_triple(Array(document.location.href,"attributionURL",$('[rel="cc:attributionURL"]')[0].href));
+			add_triple(Array(document.location.href,"attributionName",$('[property="cc:attributionName"]')[0].innerHTML));
+			
+		}
 		
 	}
 
-}
-
-if($('[property="cc:attributionName"]')[0]){
-
-	if($('[property="cc:attributionName"]')[0].innerHTML){		
-
-		add_triple(Array(document.location.href,"attributionName",$('[property="cc:attributionName"]')[0].innerHTML));
-		
+	if($(".charm-item-license-url")[0]){
+		add_triple(Array(document.location.href,"license",$(".charm-item-license-url").attr("href")));
 	}
-	
-}
 
-switch(document.location.href.split(".")[1]){
-	
-	case "flickr": 	author = $('.photo-name-line-2')[0];
-					authorname = author.innerHTML.split("\n").join("");
-					
-					if(authorname.length!=1){
-							
-						triple_array = Array(document.location.href, "author", authorname);
-						add_triple(triple_array)
-						triple_array = Array();
-						break;
+	switch(document.location.href.split(".")[1]){
+		
+		case "flickr": 	author = $('.owner-name').html();
 						
-					}
-					
- 					break;
-	default: break;
-	
-}
+						if(author.length!=1){
+								
+							triple_array = Array(document.location.href, "author", author);
+							add_triple(triple_array)
+							triple_array = Array();
+							break;
+							
+						}
+						
+						break;
+		default: break;
+		
+	}
 
-if(license_found){	
-	chrome.extension.sendMessage({url_to_show: document.location.href, show: "icon", html: triple_store});
-	console.log("LICENCE");
+	if(license_found){	
+		chrome.extension.sendMessage({url_to_show: document.location.href, show: "icon", html: triple_store});
+	}
+
 }    
