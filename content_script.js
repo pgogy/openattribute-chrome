@@ -161,13 +161,26 @@ function parse_html(){
 	switch(document.location.href.split(".")[1]){
 		
 		case "flickr": 	author = $('.owner-name').html();
+		
+						if(author==undefined){	
 						
-						if(author.length!=1){
+							author = $('.photo-name-line-1')
+								.children()
+								.first()
+								.html();
+						
+						}
+
+						if(author!=undefined){
+						
+							if(author.length!=1){
+									
+								triple_array = Array(document.location.href, "author", author);
+								add_triple(triple_array)
+								triple_array = Array();
+								break;
 								
-							triple_array = Array(document.location.href, "author", author);
-							add_triple(triple_array)
-							triple_array = Array();
-							break;
+							}
 							
 						}
 						

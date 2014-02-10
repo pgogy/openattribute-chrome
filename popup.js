@@ -29,7 +29,7 @@
 	
 
   function init(){
-	
+  
 		chrome.extension.sendMessage({wanting:"tab_id"}, function(data){
 			
 			populate_window();
@@ -39,17 +39,42 @@
   }
   
   function populate_window(){
-	
+  
 	var bkg = chrome.extension.getBackgroundPage(); 
 	
 	obj = bkg.active_data;
 	
-	title = bkg.active_data["title"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");
-	url = bkg.active_data["url"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");
-	license = bkg.active_data["license"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");
-	license_link = bkg.active_data["license_link"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");
-	license_shorthand = bkg.active_data["license_shorthand"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");
-	author = bkg.active_data["author"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");
+	if(bkg.active_data["title"]!=undefined){
+		title = bkg.active_data["title"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");		
+	}
+	
+	if(bkg.active_data["url"]!=undefined){
+		url = bkg.active_data["url"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");
+	}
+	
+	if(bkg.active_data["license"]!=undefined){
+		license = bkg.active_data["license"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");
+	}else{
+		license = "";
+	}
+	
+	if(bkg.active_data["license_link"]!=undefined){
+		license_link = bkg.active_data["license_link"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");
+	}else{
+		license_link = "";
+	}
+	
+	if(bkg.active_data["license_shorthand"]!=undefined){
+		license_shorthand = bkg.active_data["license_shorthand"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");
+	}else{
+		license_shorthand = "";
+	}
+	
+	if(bkg.active_data["author"]!=undefined){
+		author = bkg.active_data["author"].split("\"").join(" ").split("<").join(" ").split("javascript").join("");
+	}else{
+		author = "";
+	}
 	
 	if(author.length==0){
 	

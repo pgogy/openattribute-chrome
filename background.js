@@ -146,6 +146,8 @@
 		chrome.pageAction.show(sender.tab.id);	
 	  	
 	  }else if(request.wanting == "tab_id"){
+	  
+		console.log("tab id");
 		
 		chrome.windows.getCurrent(function(window){
 			
