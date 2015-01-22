@@ -100,9 +100,10 @@
 	page_title.appendChild(newtext);
 	parent_node.body.appendChild(page_title);	
 	
-	attrib_string = '<span property="dct:title">' + title + '</span>';
+	attrib_string = '<a href="' + url + '"><span property="dct:title">' + title + '</span></a>';
+	attrib_string_light = title;
 	
-	non_html_attrib_string = title + " taken from " + url + "\n";
+	non_html_attrib_string = "[" + title + "](" + url + ")";
 	
 	var page_url = document.createElement("P");
 	newtext=document.createTextNode("Source : " + url);
@@ -121,10 +122,7 @@
 	page_license.appendChild(page_license_text_holder_link);
 	parent_node.body.appendChild(page_license);	
 
-	attrib_string_light = title + " : taken from - " + url;
-	
-	if(author!=""&&attribution_url!=""){
-		
+	if(author!=""){
 		var page_attrib = document.createElement("P");		
 		var page_attrib_text_holder = document.createElement("SPAN");		
 		page_attrib_text_holder.innerText = "Author : ";		
@@ -137,12 +135,17 @@
 		page_attrib.appendChild(page_attrib_text_holder_link);
 		parent_node.body.appendChild(page_license);	
 	
-		attrib_string += '<a rel="cc:attributionName" ' + 'href="' + attribution_url + '" target=\"_blank\">' + author + '</a>';
-			
-		attrib_string_light += "\nAuthor: " + author + " ";
+		if(attribution_url!="") {
+			attrib_string += ' by <a rel="cc:attributionName" ' + 'href="' + attribution_url + '" >' + author + '</a>';
+		}else{
+			attrib_string += ' by <a rel="cc:attributionName">' + author + '</a>';
+		}			
+		attrib_string_light += " by " + author;
 		
 	}
 	
+	attrib_string_light += ", " + url;
+
 	function more_open(){
 	
 		if(document.getElementById("attrib_iframe").contentWindow.document.getElementById('extra').style.display=='block'){
@@ -160,8 +163,7 @@
 	page_reveal_segment.appendChild(page_reveal_segment_button);		
 	parent_node.body.appendChild(page_reveal_segment);
 	page_reveal_segment_button.addEventListener("click",more_open);
-
-	attrib_string_light += "\n" + license_link;		
+	
 			
 	if(license_shorthand.indexOf("  ")!=-1){
 	
@@ -179,8 +181,9 @@
 	
 	l_s = l_s.join(" ");
 	
-	attrib_string +='<a rel="license" target=\"_blank\" href="' + license_link + '">' + license + " / " + l_s + '</a>';
+	attrib_string +=' (<a rel="license" href="' + license_link + '">' + l_s + '</a>)';
 	attrib_string = "<div xmlns:dc=\"http://purl.org/dc/terms/\" xmlns:cc\"http://creativecommons.org/#ns\" about=\"" + url + "\">" + attrib_string + "</div>";
+	attrib_string_light += " /" + l_s;		
 	
 	non_html_attrib_string += license.split("\n").join("") + " / " + l_s + "\n";
 	
